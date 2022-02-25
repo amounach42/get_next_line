@@ -3,6 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+size_t	ft_strlen(char *str)
+{
+	size_t	i;
+
+	if (!str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
+}
+
 char	*ft_strchr(const char *s, int c)
 {
 	char	*str;
@@ -40,5 +51,4 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		str[i] = s[start + i];
 	str[i] = '\0';
 	return (str);
-
 }
