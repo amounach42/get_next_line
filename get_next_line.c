@@ -67,6 +67,13 @@ char	*ft_rest(char *buffer)
 	rest = (char *)malloc(sizeof(char) * len + 1);
 	if (!rest)
 		return (0);
+	i++;
+	j = 0;
+	while (rest[i])
+		rest[j++] = rest[i++];
+	rest[j] = '\0';
+	free (buffer);
+	return (rest);
 }
 
 char	*get_next_line(int fd)
