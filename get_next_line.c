@@ -1,6 +1,23 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+char	*ft_read(int fd, char *buffer)
+{
+	char	buff[BUFFER_SIZE + 1];
+	int		bytes_read;
+
+	bytes_read = 1;
+	while (!ft_strchr(buffer, '\n') && bytes_read)
+	{
+		bytes_read = read(fd, buff, BUFFER_SIZE);
+		if (bytes_read == -1)
+			return (0);
+		buff[bytes_read] = '\0';
+		buffer_ft_strjoin(buffer, bytes_read);
+	}
+	return (buffer)
+}
+
 char	*get_line(char	*buffer)
 {
 	int		i;
@@ -28,6 +45,8 @@ char	*get_line(char	*buffer)
 	return (line);
 
 }
+
+
 
 char	*get_next_line(int fd)
 {
