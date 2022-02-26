@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amounach <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/26 17:07:27 by amounach          #+#    #+#             */
+/*   Updated: 2022/02/26 17:09:19 by amounach         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -33,8 +45,7 @@ char	*get_line(char	*buffer)
 	line = (char *)malloc((i + 1) * sizeof(char));
 	if (!line)
 		return (0);
-
-	while (buffer[i] != '\n' && buffer[i] != '\0') 
+	while (buffer[i] != '\n' && buffer[i] != '\0')
 	{
 		line[i] = buffer[i];
 		i++;
@@ -43,19 +54,17 @@ char	*get_line(char	*buffer)
 		line[i] = '\n';
 	line[i] = '\0';
 	return (line);
-
 }
 
 char	*ft_rest(char *buffer)
 {
 	char	*rest;
-	int 	i;
+	int		i;
 	int		j;
 	int		len;
 
 	i = 0;
 	j = 0;
-
 	while (buffer[i] != '\n' && buffer[i])
 		i++;
 	if (!buffer[i])
@@ -78,5 +87,15 @@ char	*ft_rest(char *buffer)
 
 char	*get_next_line(int fd)
 {
-		
+	static char	*buffer;
+	char		*line;
+
+	if (fd < 0 || BUFEFR_SIZE <= 0)
+		return (0);
+	buffer = ft_read(fd, buffer);
+	if (!buffer)
+		return (0);
+	line = get_line(buffer);
+	buffer = ft_rest(buffer);
+	return (line);
 }
