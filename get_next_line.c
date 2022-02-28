@@ -6,25 +6,24 @@
 /*   By: amounach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 17:07:27 by amounach          #+#    #+#             */
-/*   Updated: 2022/02/26 17:09:19 by amounach         ###   ########.fr       */
+/*   Updated: 2022/02/28 15:00:09 by amounach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
+#include "get_next_line.h"
 
 char	*ft_read(int fd, char *buffer)
 {
 	char	buff[BUFFER_SIZE + 1];
-	int		bytes_read;
+	int		n_b;
 
-	bytes_read = 1;
-	while (!ft_strchr(buffer, '\n') && bytes_read)
+	n_b = 1;
+	while (!ft_strchr(buffer, '\n') && n_b)
 	{
-		bytes_read = read(fd, buff, BUFFER_SIZE);
-		if (bytes_read == -1)
+		n_b = read(fd, buff, BUFFER_SIZE);
+		if (n_b == -1)
 			return (0);
-		buff[bytes_read] = '\0';
+		buff[n_b] = '\0';
 		buffer = ft_strjoin(buffer, buff);
 	}
 	return (buffer);
@@ -38,20 +37,21 @@ char	*get_line(char	*buffer)
 	i = 0;
 	if (!buffer[i])
 		return (0);
-	while (buffer[i] != '\n' && buffer[i])
+	while (buffer[i] != '\n' && buffer[i] != '\0')
 		i++;
 	if (buffer[i] == '\n')
 		i++;
-	line = (char *)malloc((i + 1) * sizeof(char));
+	line = (char *)malloc(sizeof(char) * i + 1);
 	if (!line)
 		return (0);
+	i = 0;
 	while (buffer[i] != '\n' && buffer[i] != '\0')
 	{
 		line[i] = buffer[i];
 		i++;
 	}
 	if (buffer[i] == '\n')
-		line[i] = '\n';
+		line[i++] = '\n';
 	line[i] = '\0';
 	return (line);
 }
@@ -77,9 +77,8 @@ char	*ft_rest(char *buffer)
 	if (!rest)
 		return (0);
 	i++;
-	j = 0;
-	while (rest[i])
-		rest[j++] = rest[i++];
+	while (buffer[i])
+		rest[j++] = buffer[i++];
 	rest[j] = '\0';
 	free (buffer);
 	return (rest);
@@ -90,7 +89,7 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char		*line;
 
-	if (fd < 0 || BUFEFR_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
 	buffer = ft_read(fd, buffer);
 	if (!buffer)
@@ -98,4 +97,19 @@ char	*get_next_line(int fd)
 	line = get_line(buffer);
 	buffer = ft_rest(buffer);
 	return (line);
+}
+
+int		main(void)
+{
+	char *line;
+	int	fd;
+
+	fd = open("text.txt", O_RDONLY);
+	while (line)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			return (0);
+		printf("%s", line);
+	}
 }
