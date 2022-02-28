@@ -1,0 +1,4 @@
+first line
+second line with more text
+
+before this is an empty line
